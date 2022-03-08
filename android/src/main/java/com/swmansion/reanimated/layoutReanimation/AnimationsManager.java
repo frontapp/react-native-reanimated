@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.WindowManager;
+
 import com.facebook.react.bridge.JavaOnlyMap;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
@@ -369,11 +371,19 @@ public class AnimationsManager implements ViewHierarchyObserver {
     }
 
     DisplayMetrics displaymetrics = new DisplayMetrics();
-    mContext.getCurrentActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-    int height = displaymetrics.heightPixels;
-    int width = displaymetrics.widthPixels;
-    preparedValues.put("windowWidth", PixelUtil.toDIPFromPixel(width));
-    preparedValues.put("windowHeight", PixelUtil.toDIPFromPixel(height));
+    WindowManager manager = mContext.getCurrentActivity().getWindowManager();
+    // Make sure we're not crashing if the window is null
+    if(manager != null) {
+      manager.getDefaultDisplay().getMetrics(displaymetrics);
+      int height = displaymetrics.heightPixels;
+      int width = displaymetrics.widthPixels;
+      preparedValues.put("windowWidth", PixelUtil.toDIPFromPixel(width));
+      preparedValues.put("windowHeight", PixelUtil.toDIPFromPixel(height));
+    } else {
+      preparedValues.put("windowWidth", 100f);
+      preparedValues.put("windowHeight", 100f);
+    }
+
     return preparedValues;
   }
 
