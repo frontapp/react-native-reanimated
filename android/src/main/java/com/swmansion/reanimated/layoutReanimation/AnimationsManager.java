@@ -1,5 +1,6 @@
 package com.swmansion.reanimated.layoutReanimation;
 
+import android.app.Activity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -370,11 +371,11 @@ public class AnimationsManager implements ViewHierarchyObserver {
       preparedValues.put(key, PixelUtil.toDIPFromPixel((int) values.get(key)));
     }
 
-    DisplayMetrics displaymetrics = new DisplayMetrics();
-    WindowManager manager = mContext.getCurrentActivity().getWindowManager();
-    // Make sure we're not crashing if the window is null
-    if(manager != null) {
-      manager.getDefaultDisplay().getMetrics(displaymetrics);
+    Activity activity = mContext.getCurrentActivity();
+    // Make sure we're not crashing if the activity is null
+    if(activity != null) {
+      DisplayMetrics displaymetrics = new DisplayMetrics();
+      activity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
       int height = displaymetrics.heightPixels;
       int width = displaymetrics.widthPixels;
       preparedValues.put("windowWidth", PixelUtil.toDIPFromPixel(width));
